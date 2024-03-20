@@ -18,7 +18,7 @@ import com.dev.sportsstore.service.ProductService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 	
 	@Autowired

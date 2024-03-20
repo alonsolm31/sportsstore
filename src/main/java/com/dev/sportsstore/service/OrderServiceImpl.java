@@ -3,9 +3,12 @@ package com.dev.sportsstore.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dev.sportsstore.exception.OrderNotFoundException;
+import com.dev.sportsstore.exception.ProductNotFoundException;
 import com.dev.sportsstore.model.Cart;
 import com.dev.sportsstore.model.CartLine;
 import com.dev.sportsstore.model.Order;
+import com.dev.sportsstore.model.Product;
 import com.dev.sportsstore.repository.CartLineRepository;
 import com.dev.sportsstore.repository.CartRepository;
 import com.dev.sportsstore.repository.OrderRepository;
@@ -54,15 +57,19 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepository.findAll();
 	}
 
-//	@Override
-//	public Order updateOrder(long orderId, Order order) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 	@Override
 	public void deleteOrderById(long orderId) {
 		orderRepository.deleteById(orderId);
+	}
+
+	@Override
+	public Order updateOrder(long orderId, Order order) {
+		// TODO Auto-generated method stub
+		Order existingOrder = orderRepository.findById(orderId)
+				.orElseThrow(() -> new OrderNotFoundException(String.format("No order with id %s is available", orderId)));
+		
+		existingOrder.setShipped(order.isShipped());
+		return orderRepository.save(existingOrder);
 	}
 
 }
